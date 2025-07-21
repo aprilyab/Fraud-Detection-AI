@@ -154,7 +154,7 @@ fraud-detection-ai/
 
 
 ## Contact
-**Author**: Henok Yoseph (henokapril@gmail.com)
+**Author**: Henok Yoseph
 **Email**: henokapril@gmail.com  
 **GitHub**: https://github.com/aprilyab
 
