@@ -129,11 +129,8 @@ fraud-detection-ai/
 
 #### Deliverables:
 
-- Model training scripts in `src/models/`
-- Evaluation plots in `reports/figures/`
-- Saved models in `saved_models/`
-- Decision justification report
-
+- Model training scripts in `notebooks/model_training_selection`
+- Saved models in `models/`
 
 ### Task 3: Model Explainability
 
