@@ -1,164 +1,206 @@
-Fraud Detection AI
-Accurately Detecting Fraud in E-Commerce and Banking Using Machine Learning and Explainability Tools
+#  Fraud Detection Using Machine Learning
 
-  Project Overview
-This project develops robust machine learning pipelines to detect fraudulent transactions in e-commerce and banking environments. It tackles challenges such as class imbalance, feature engineering, and model interpretability using tools like XGBoost and SHAP. Final outputs include deployable, interpretable models to support fraud mitigation strategies at Adey Innovations Inc.
+This project develops a complete end-to-end machine learning pipeline to detect fraudulent transactions using real-world-style data. It handles class imbalance, performs advanced feature engineering, builds performant models, and ensures interpretability using SHAP.
 
-   Business Objective
-To minimize financial fraud losses and enhance customer trust by:
+---
 
-Improving detection of fraudulent online and bank transactions.
+##  Project Structure
 
-Reducing false positives and negatives to optimize operational efficiency.
+```
+Fraud-Detection-AI/
+│
+├── data/ # Raw and external datasets
+│ ├── Fraud_Data.csv
+│ └── IpAddress_to_Country.csv
+│
+├── notebooks/ # Jupyter Notebooks for EDA, training, SHAP analysis
+│ ├── 1_EDA.ipynb
+│ ├── 2_Modeling.ipynb
+│ └── 3_Explainability.ipynb
+│
+├── scripts/ # Python scripts for modular execution
+│ ├── preprocess_data.py
+│ ├── train_model.py
+│ └── model_explainability.py
+│
+├── requirements.txt # Project dependencies
+└── README.md # This file
 
-Integrating interpretable ML models into financial systems.
 
-Supporting real-time and proactive fraud detection.
+##  Business Objective
 
-   Motivation
-Fraud in digital finance is high-impact, rapidly evolving, and data-intensive. Key challenges include:
+Fraudulent transactions pose a serious threat to financial institutions and e-commerce platforms. They often occur in low-frequency patterns, making them hard to detect.
 
-Severe class imbalance between legitimate and fraudulent cases.
+**Objective**:
+- Build a deployable fraud detection system
+- Improve precision and recall to minimize financial loss
+- Provide interpretable decisions (especially for regulators and stakeholders)
 
-Complex feature extraction from diverse data types (e.g., timestamps, IPs).
+---
 
-The growing demand for transparency in automated decisions.
+##  Data Overview
 
-High costs of detection errors on the user experience and business trust.
+### 1. `Fraud_Data.csv`
 
-   Datasets Used
-This project leverages three datasets:
+| Column Name        | Description                              |
+|--------------------|------------------------------------------|
+| user_id            | Unique identifier for each user          |
+| signup_time        | Timestamp of account creation            |
+| purchase_time      | Timestamp of the transaction             |
+| purchase_value     | Value of the transaction in USD          |
+| device_id          | Device identifier                        |
+| source             | How user came to the site (SEO, ads...)  |
+| browser            | User browser (Chrome, Firefox, etc.)     |
+| ip_address         | User IP address                          |
+| class              | Target (1 = Fraud, 0 = Not Fraud)        |
 
-1. Fraud_Data.csv (E-Commerce Transactions)
-   Includes features like signup_time, purchase_time, purchase_value, device_id, etc.
+### 2. `IpAddress_to_Country.csv`
 
-   Binary label indicating fraud status.
+| Column Name        | Description                              |
+|--------------------|------------------------------------------|
+| lower_bound_ip_address | Starting IP range                    |
+| upper_bound_ip_address | Ending IP range                      |
+| country                 | Country name                        |
 
-2. IpAddress_to_Country.csv
-   Maps IP address ranges to country codes.
+---
 
-   Enriches transactional data with geolocation features.
+##  Data Preprocessing
 
-3. creditcard.csv (Bank Transactions)
-   Contains anonymized features (V1–V28) via PCA.
+- Converted `purchase_time` and `signup_time` to datetime
+- Extracted:
+  - **Hour**, **Weekday**, **Time Period** (Morning, Afternoon, Evening)
+- Mapped IP address to country by:
+  - Converting IPs to integers
+  - Performing binary search on IP ranges
+- Encoded:
+  - **Categorical** features (e.g., `browser`, `source`, `country`)
+- Scaled:
+  - **Numerical** features using `StandardScaler`
+- Output: `X_train`, `X_test`, `y_train`, `y_test`
 
-   Includes Amount, Time, and binary Class label.
+---
 
- All datasets exhibit significant class imbalance and require targeted preprocessing.
+##  Class Imbalance Strategy
 
-    Learning Outcomes
-By completing this project, you will:
+Fraud data is highly imbalanced (~2.5% fraud cases).
 
-Integrate and preprocess structured financial and geolocation data.
+### Techniques Explored:
+- **RandomUnderSampler**
+- **SMOTE (Synthetic Minority Oversampling Technique)**
+- **Class weights in model**
 
-Engineer temporal and spatial fraud indicators.
+ Final Choice: `RandomUnderSampler` — improved performance without overfitting.
 
-Apply ML models to imbalanced datasets using advanced resampling.
+---
 
-Evaluate using robust metrics: F1-score, AUC-PR, Confusion Matrix.
+##  Feature Engineering Highlights
 
-Use SHAP to interpret model predictions and communicate insights clearly.
+| Feature Category     | Features Extracted                                      |
+|----------------------|----------------------------------------------------------|
+| Time-Based Features  | Hour, Weekday, Time Period                               |
+| Location Features    | Country from IP                                          |
+| Browser/Device       | Encoded browser types                                    |
+| Behavior Features    | Signup vs purchase time difference (optional improvement) |
 
-🗂 Project Structure
-fraud-detection-ai/
-├── config/                  # Configuration files (e.g., config.yaml)
-├── data/
-│   ├── external/            # Raw auxiliary data (e.g., IP-country)
-│   ├── processed/           # Cleaned datasets
-│   └── raw/                 # Original datasets
-├── models/                  # Trained model files
-├── notebooks/
-│   ├── exploratory/         # EDA notebooks
-│   └── modeling/            # Training and evaluation notebooks
-              # Training logs
-         # Serialized best models
-├── scripts/                 # Python scripts
-├── src/
-│   ├── data/                # Data loading & cleaning
-│   ├── features/            # Feature engineering logic
-│   ├── models/              # Training and inference
-│   ├── utils/               # Utility functions
-│   └── visualization/       # SHAP and EDA plots
-├── tests/                   # Unit tests
-├── visuals/                 # Custom charts and diagrams
-├── .gitignore
-├── README.md
-└── requirements.txt
-  Project Milestones
-Task 1: Data Analysis & Preprocessing
-Goals:
+---
 
-Handle nulls, data types, and duplicates.
+##  Machine Learning Model
 
-Perform EDA (univariate & bivariate).
+###  Model Chosen: **XGBoost Classifier**
+XGBoost is optimized for performance on tabular and imbalanced datasets.
 
-Merge IP geolocation data.
+###  Parameters:
+- Learning Rate
+- Max Depth
+- Number of Estimators
+- Evaluation Metric: `auc`, `logloss`
 
-Engineer fraud-indicative features:
+###  Evaluation Metrics:
 
-hour_of_day, day_of_week, time_since_signup
+| Metric         | Value (approx) |
+|----------------|----------------|
+| Accuracy       | ~97%           |
+| Precision      | High           |
+| Recall         | High           |
+| F1-Score       | Balanced        |
+| ROC AUC Score  | > 0.98         |
 
-Transaction frequency, velocity
+---
 
-Handle imbalance (e.g., SMOTE, undersampling).
+##  Evaluation Visuals
 
-Encode categorical and scale numerical features.
+### Confusion Matrix:
+![Confusion Matrix](outputs/confusion_matrix.png)
 
-Deliverables:
+### ROC Curve:
+![ROC Curve](outputs/roc_curve.png)
 
-Preprocessing notebooks.
+---
 
-Visual insights.
+##  Explainability (SHAP)
 
-Cleaned datasets in data/processed/.
+###  Why SHAP?
+- Regulatory requirements demand model transparency.
+- Stakeholders need to trust model decisions.
 
-Task 2: Model Training & Evaluation
-Goals:
+###  SHAP Visuals:
+- **Summary Plot**: Shows overall feature impact
+- **Force Plot**: Explains individual prediction
 
-Prepare train-test splits for each dataset.
+| SHAP Feature Importance (Top 5) |
+|---------------------------------|
+| Hour of Purchase                |
+| Country (from IP)               |
+| Browser                         |
+| Purchase Value                  |
+| Source                          |
 
-Train and compare:
+####  SHAP Summary Plot:
+![SHAP Summary Plot](outputs/shap_summary_plot.png)
 
-Logistic Regression
+####  SHAP Force Plot:
+![SHAP Force Plot](outputs/shap_force_plot.png)
 
-XGBoost or Random Forest
+---
 
-Evaluate using:
+##  Deployment-Readiness
 
-F1-score
+-  Final Model saved using `joblib`
+-  SHAP plots auto-generated on inference
+-  Modular Python scripts
+-  Reproducible: All steps can be re-executed using CLI or notebooks
 
-Precision-Recall AUC
+---
 
-Confusion Matrix
+##  How to Run the Project
 
-Deliverables:
+### 1. Clone the Repo
+git clone https://github.com/aprilyab/Fraud-Detection-AI.git
+cd Fraud-Detection-AI
 
-Model training notebooks/scripts.
+## 📝 How to Run
 
-Saved models in models/.
+1. Clone the repository  
+2. Install dependencies  
+```bash
+pip install -r requirements.txt
+```
+3. Run preprocessing and training
+```bash
+python scripts/train_model.py
+```
 
-Task 3: Model Explainability
-Goals:
+4. Generate SHAP explanations
+```bash
+python scripts/model_explainability.py
+```
 
-Use SHAP on the top-performing model.
+##  Future Work
 
-Generate:
+- Integrate with a real-time API
+- Experiment with ensemble methods
+- Add deep learning models (e.g., LSTM for time-based patterns)
 
-Summary plots
-
-Force plots
-
-Interpret top contributing features.
-
-Link ML explanations to real-world fraud indicators.
-
-Deliverables:
-
-SHAP visualizations in reports/figures/
-
-Explainability code in src/visualization/
-
-Interpretability discussion in final report.
 
 📬 Contact
 Author: Henok Yoseph
