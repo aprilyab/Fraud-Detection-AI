@@ -1,160 +1,169 @@
-# Fraud Detection AI
+Fraud Detection AI
+Accurately Detecting Fraud in E-Commerce and Banking Using Machine Learning and Explainability Tools
 
-**Accurately Detecting Fraud in E-Commerce and Bank Transactions Using Machine Learning and Explainability Tools**
+  Project Overview
+This project develops robust machine learning pipelines to detect fraudulent transactions in e-commerce and banking environments. It tackles challenges such as class imbalance, feature engineering, and model interpretability using tools like XGBoost and SHAP. Final outputs include deployable, interpretable models to support fraud mitigation strategies at Adey Innovations Inc.
 
+   Business Objective
+To minimize financial fraud losses and enhance customer trust by:
 
-##  Project Overview
+Improving detection of fraudulent online and bank transactions.
 
-This project aims to build robust machine learning pipelines for fraud detection in **e-commerce** and **bank transactions**. The project addresses challenges like **data imbalance**, **feature engineering**, and **explainability** using tools such as **XGBoost** and **SHAP**. Final deliverables include interpretable models and comprehensive analysis to assist fraud prevention strategies at **Adey Innovations Inc.**
+Reducing false positives and negatives to optimize operational efficiency.
 
----
+Integrating interpretable ML models into financial systems.
 
-##  Business Objective
+Supporting real-time and proactive fraud detection.
 
-To reduce financial losses and enhance customer trust by:
+   Motivation
+Fraud in digital finance is high-impact, rapidly evolving, and data-intensive. Key challenges include:
 
-- Improving fraud detection in online transactions and banking.
-- Reducing false positives and false negatives.
-- Integrating interpretable machine learning models into financial systems.
-- Supporting real-time detection and proactive decision-making.
+Severe class imbalance between legitimate and fraudulent cases.
 
----
+Complex feature extraction from diverse data types (e.g., timestamps, IPs).
 
-##  Motivation
+The growing demand for transparency in automated decisions.
 
-Financial fraud is complex, fast-evolving, and costly. Challenges include:
+High costs of detection errors on the user experience and business trust.
 
-- Vast imbalance between fraudulent and legitimate transactions.
-- Difficulties in feature extraction from diverse data (timestamps, IPs).
-- The need for transparency and trust in automated systems.
-- Impact of detection accuracy on user experience.
+   Datasets Used
+This project leverages three datasets:
 
----
+1. Fraud_Data.csv (E-Commerce Transactions)
+   Includes features like signup_time, purchase_time, purchase_value, device_id, etc.
 
-##  Dataset Description
+   Binary label indicating fraud status.
 
-The project utilizes three main datasets:
+2. IpAddress_to_Country.csv
+   Maps IP address ranges to country codes.
 
-### 1. `Fraud_Data.csv` (E-commerce Transactions)
-- Includes transaction details and a binary fraud label.
-- Features: `signup_time`, `purchase_time`, `purchase_value`, `device_id`, etc.
+   Enriches transactional data with geolocation features.
 
-### 2. `IpAddress_to_Country.csv` (Geolocation)
-- Maps IP ranges to country codes.
-- Used to enrich e-commerce transaction data.
+3. creditcard.csv (Bank Transactions)
+   Contains anonymized features (V1–V28) via PCA.
 
-### 3. `creditcard.csv` (Bank Credit Transactions)
-- Contains anonymized PCA components (`V1`–`V28`), `Amount`, `Time`, and `Class` as label.
+   Includes Amount, Time, and binary Class label.
 
->  All datasets have class imbalance requiring special preprocessing.
+ All datasets exhibit significant class imbalance and require targeted preprocessing.
 
----
+    Learning Outcomes
+By completing this project, you will:
 
-##  Learning Outcomes
+Integrate and preprocess structured financial and geolocation data.
 
-- Handle structured financial data and merge external features.
-- Engineer time and location-based fraud detection signals.
-- Apply ML models to imbalanced datasets.
-- Use evaluation metrics like AUC-PR and F1-Score.
-- Interpret model predictions with SHAP explainability.
+Engineer temporal and spatial fraud indicators.
 
-##  Project Folder Structure
+Apply ML models to imbalanced datasets using advanced resampling.
 
+Evaluate using robust metrics: F1-score, AUC-PR, Confusion Matrix.
 
+Use SHAP to interpret model predictions and communicate insights clearly.
+
+🗂 Project Structure
 fraud-detection-ai/
-├── config/
-│   └── config.yaml
+├── config/                  # Configuration files (e.g., config.yaml)
 ├── data/
-│   ├── external/
-│   ├── processed/
-│   └── raw/
-├── models/
+│   ├── external/            # Raw auxiliary data (e.g., IP-country)
+│   ├── processed/           # Cleaned datasets
+│   └── raw/                 # Original datasets
+├── models/                  # Trained model files
 ├── notebooks/
-│   ├── exploratory/
-│   └── modeling/
-├── reports/
-│   ├── figures/
-│   └── logs/
-├── saved_models/
-├── scripts/
+│   ├── exploratory/         # EDA notebooks
+│   └── modeling/            # Training and evaluation notebooks
+              # Training logs
+         # Serialized best models
+├── scripts/                 # Python scripts
 ├── src/
-│   ├── data/
-│   ├── features/
-│   ├── models/
-│   ├── utils/
-│   └── visualization/
-├── tests/
-├── visuals/
+│   ├── data/                # Data loading & cleaning
+│   ├── features/            # Feature engineering logic
+│   ├── models/              # Training and inference
+│   ├── utils/               # Utility functions
+│   └── visualization/       # SHAP and EDA plots
+├── tests/                   # Unit tests
+├── visuals/                 # Custom charts and diagrams
 ├── .gitignore
 ├── README.md
 └── requirements.txt
+  Project Milestones
+Task 1: Data Analysis & Preprocessing
+Goals:
 
-## Deliverables and Tasks
+Handle nulls, data types, and duplicates.
 
-### Task 1: Data Analysis and Preprocessing
+Perform EDA (univariate & bivariate).
 
-#### Objectives:
+Merge IP geolocation data.
 
-- Handle missing values and data types
-- Remove duplicates
-- Perform EDA: univariate and bivariate analysis
-- Merge IP data to enable geolocation features
-- Feature engineering:
-  - `hour_of_day`, `day_of_week`, `time_since_signup`
-  - Transaction frequency and velocity metrics
-- Handle class imbalance
-- Normalize/scale numeric features
-- Encode categorical variables
+Engineer fraud-indicative features:
 
-#### Deliverables:
+hour_of_day, day_of_week, time_since_signup
 
-- Jupyter notebooks for preprocessing
-- Visualizations and insights
-- Cleaned and transformed datasets saved in `data/processed/`
+Transaction frequency, velocity
 
----
+Handle imbalance (e.g., SMOTE, undersampling).
 
-### Task 2: Model Building and Training
+Encode categorical and scale numerical features.
 
-#### Objectives:
+Deliverables:
 
-- Train-test split for both datasets
-- Build two models per dataset:
-  - **Logistic Regression**
-  - **XGBoost** or **Random Forest**
-- Evaluate using:
-  - **F1-score**
-  - **Precision-Recall AUC**
-  - **Confusion Matrix**
+Preprocessing notebooks.
 
-#### Deliverables:
+Visual insights.
 
-- Model training scripts in `notebooks/model_training_selection`
-- Saved models in `models/`
+Cleaned datasets in data/processed/.
 
-### Task 3: Model Explainability
+Task 2: Model Training & Evaluation
+Goals:
 
-#### Objectives:
+Prepare train-test splits for each dataset.
 
-- Apply **SHAP** to best-performing model
-- Generate:
-  - **SHAP summary plot**
-  - **Force plot**
-- Interpret key feature contributions
-- Link SHAP explanations to business insights
+Train and compare:
 
-#### Deliverables:
+Logistic Regression
 
-- SHAP visualizations in `reports/figures/`
-- SHAP implementation script in `src/visualization/`
-- Final report discussion on interpretability
+XGBoost or Random Forest
 
+Evaluate using:
 
-## Contact
-**Author**: Henok Yoseph
-**Email**: henokapril@gmail.com  
-**GitHub**: https://github.com/aprilyab
+F1-score
 
+Precision-Recall AUC
 
-This project is  designed to solve real-world fintech challenges by combining structured analysis, advanced ML techniques, and explainability into a practical, deployable solution.
+Confusion Matrix
+
+Deliverables:
+
+Model training notebooks/scripts.
+
+Saved models in models/.
+
+Task 3: Model Explainability
+Goals:
+
+Use SHAP on the top-performing model.
+
+Generate:
+
+Summary plots
+
+Force plots
+
+Interpret top contributing features.
+
+Link ML explanations to real-world fraud indicators.
+
+Deliverables:
+
+SHAP visualizations in reports/figures/
+
+Explainability code in src/visualization/
+
+Interpretability discussion in final report.
+
+📬 Contact
+Author: Henok Yoseph
+Email: henokapril@gmail.com
+GitHub: github.com/aprilyab
+
+🚀 This project solves real-world fraud detection problems by combining data science, domain knowledge, and explainable AI into a deployable, effective solution for fintech.
 
